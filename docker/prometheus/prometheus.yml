@@ -11,7 +11,17 @@ scrape_configs:
   static_configs:
   - targets: ['localhost:9090']
 
-- job_name: link-converter
+- job_name: book-store
   metrics_path: /actuator/prometheus
   static_configs:
-  - targets: ['link-converter:8081/link-converter']
+  - targets: ['book-store:8081/book-store']
+
+- job_name: customer
+  metrics_path: /actuator/prometheus
+  static_configs:
+    - targets: ['customer:8081/customer']
+
+- job_name: book-service
+  metrics_path: /actuator/prometheus
+  static_configs:
+    - targets: ['book-service:8081/book-service']
