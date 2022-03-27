@@ -12,11 +12,11 @@ If everything goes well, you can access the following services at given location
 * Tracing Server (Zipkin) - http://localhost:9411/zipkin/ (we use [openzipkin](https://github.com/openzipkin/zipkin/tree/master/zipkin-server))
 * Book-Store (Spring Boot Admin) - http://localhost:8081/book-store
 * Customer - http://localhost:8083/customer
-* Book-Service - http://localhost:8083/book-service
+* Book-Service - http://localhost:8084/book-service
 * MongoDB - http://localhost:27017  //   username : root & password : example
 * Mongo Express - http://localhost:8082 - Dockerized tool for using mongo
 * Mongo Client - http://localhost:3030 - Dockerized tool for manage mongo db
-* Grafana Dashboards - http://localhost:3000
+* Grafana Dashboards - http://localhost:3000 - Monitoring tool
 * Prometheus - http://localhost:9091
 
 You can tell Config Server to use your local Git repository by using `native` Spring profile and setting
@@ -43,6 +43,7 @@ cd config-server
 ```
 
 There is so much to do here. Licence is open. We can make it better
+## Notes
 
 ### Swagger
 
@@ -51,6 +52,9 @@ Swagger Client written but not configured because of the version of my spring ve
 the default strategy for matching request paths against registered Spring MVC handler mappings has changed from AntPathMatcher to PathPatternParser.
 [Swagger problem with spring fox](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.6-Release-Notes#pathpattern-based-path-matching-strategy-for-spring-mvc).
 
+### Tests
+
+Only customer includes tests and its below the 50% limit but the time is the big problem and TDD is not used while developing
 
 ## Starting services locally with docker-compose
 In order to start entire infrastructure using Docker, you have to build images by executing `./mvnw clean install -P buildDocker`
@@ -73,7 +77,7 @@ are usually not enough and make the `docker-compose up` painfully slow.*
 ### Postman collection
 https://www.getpostman.com/collections/17eff8ef62ee49081edc
 
-You can then access Store File here: http://localhost:8081/store-api
+You can then access customers here: http://localhost:8081/book-store/customer
 
 ### 1) Firstly Get Token Uses JWT
 ```
@@ -195,6 +199,21 @@ A JMeter load testing script is available to stress the application and generate
 Spring Boot registers a lot number of core metrics: JVM, CPU, Tomcat, Logback...
 The Spring Boot auto-configuration enables the instrumentation of requests handled by Spring MVC.
 All those three REST controllers `OwnerResource`, `PetResource` and `VisitResource` have been instrumented by the `@Timed` Micrometer annotation at class level.
+
+## Tech Stack
+
+* Mongo
+* Java 11
+* Spring Boot 2.6
+* Spring Security
+* Spring Data
+* Zipkin
+* Prometheus
+* Grafana
+* Unit Test
+* Mongo express
+* Mongo Client
+
 
 # Contributing
 
