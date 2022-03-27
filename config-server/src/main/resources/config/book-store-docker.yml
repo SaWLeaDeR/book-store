@@ -1,0 +1,48 @@
+spring:
+  application:
+  name: book-store
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8081
+  servlet:
+    context-path: /book-store
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-components: always
+      show-details: always
+      probes:
+        enabled: true
+
+jwt:
+  secret: baseUser
+  get:
+    token:
+      uri: /authenticate
+
+monitoring:
+  graphite:
+    host: grafana-server
+    port: 3000
+    report-interval: 500
+
+FileStorageController:
+  saveFile: Authenticates user and returns its JWT token.
+
+customer:
+  service:
+    url: http://customer:8083/customer
+    save: /customer
+    get: /customer

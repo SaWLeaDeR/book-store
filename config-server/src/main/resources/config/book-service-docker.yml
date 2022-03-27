@@ -1,0 +1,42 @@
+spring:
+  application:
+  name: book-service
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      authentication-database: admin
+      database: book
+      password: example
+      username: root
+
+server:
+  port: 8084
+  servlet:
+    context-path: /book-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-components: always
+      show-details: always
+      probes:
+        enabled: true
+
+
+monitoring:
+  graphite:
+    host: grafana-server
+    port: 3000
+    report-interval: 500

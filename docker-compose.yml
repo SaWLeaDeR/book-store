@@ -1,0 +1,102 @@
+version: '2.5'
+
+services:
+  config-server:
+    image: fatihkoyuncuoglu/config-server:latest
+    container_name: config-server
+    mem_limit: 512M
+    ports:
+     - 8888:8888
+    healthcheck:
+      test: curl  localhost:8888/config-server/health exit 1
+      interval: 2s
+      timeout: 30s
+      retries: 15
+
+  customer:
+    image: fatihkoyuncuoglu/customer:latest
+    container_name: customer
+    mem_limit: 512M
+    depends_on:
+      - config-server
+      - mongo
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888/config-server","-timeout=60s","--","java", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+     - 8083:8083
+
+  book-store:
+    image: fatihkoyuncuoglu/book-store:latest
+    container_name: book-store
+    mem_limit: 512M
+    depends_on:
+      - config-server
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888/config-server","-timeout=60s","--","java", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+      - 8081:8081
+
+  book-service:
+    image: fatihkoyuncuoglu/book-service:latest
+    container_name: book-service
+    mem_limit: 512M
+    depends_on:
+      - config-server
+      - mongo
+    entrypoint: ["./dockerize","-wait=tcp://config-server:8888/config-server","-timeout=60s","--","java", "org.springframework.boot.loader.JarLauncher"]
+    ports:
+      - 8084:8084
+
+  tracing-server:
+    image: openzipkin/zipkin
+    container_name: tracing-server
+    mem_limit: 512M
+    environment:
+    - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
+    ports:
+     - 9411:9411
+
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: customer
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8082:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    depends_on:
+      - mongo
+
+  mongo-client:
+    image: mongoclient/mongoclient
+    restart: always
+    ports:
+      - 3030:3000
+    depends_on:
+      - mongo
+
+  ## Grafana / Prometheus
+
+  grafana-server:
+    build: ./docker/grafana
+    container_name: grafana-server
+    mem_limit: 256M
+    ports:
+    - 3000:3000
+
+  prometheus-server:
+    build: ./docker/prometheus
+    container_name: prometheus-server
+    mem_limit: 256M
+    ports:
+    - 9091:9090

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: customer
+  cloud:
+    config:
+#      uri: http://localhost:8888/config-server
+      uri: http://config-server:8888/config-server
+      enabled: true
+  config:
+#    import: optional:configserver:http://localhost:8888/config-server
+    import: optional:configserver:http://config-server:8888/config-server

@@ -1,0 +1,4 @@
+<configuration scan="true">
+    <property name="logFileName" value="link-converter"/>
+    <include resource="com/base/logging/logback.xml"/>
+</configuration>

@@ -1,0 +1,17 @@
+package com.base.bookstore.domain.model.request;
+
+import com.base.model.dto.GenericDto;
+
+public class JwtResponse extends GenericDto {
+
+    private static final long serialVersionUID = -8091879091924046844L;
+    private final String jwttoken;
+
+    public JwtResponse(String jwttoken) {
+        this.jwttoken = jwttoken;
+    }
+
+    public String getToken() {
+        return this.jwttoken;
+    }
+}
