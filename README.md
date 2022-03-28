@@ -59,7 +59,7 @@ from each project root. Once images are ready, you can start them with a single 
 `docker-compose up`. Containers startup order is coordinated with [`dockerize` script](https://github.com/jwilder/dockerize).
 After starting services it takes a while for composition of the syncing with service registry,
 
-### Dockker Compose
+### Docker Compose
 
 For easy to use all images are built and pushed to dockerhub and users can use single command
 `docker-compose up` is enough for the compilation
@@ -89,7 +89,7 @@ Body:
 ```
 There is only one user can join the system. Because Token database is not exist.
 
-### 2) SaveCustomer
+### 2) Example SaveCustomer
 ```
 localhost:8081/book-store/customer
 ```
@@ -121,38 +121,58 @@ All file names hashed by algorithm and stored by that name.
 ```
 cd /var/log/java
 ```
+### Logging
 
-For Log 
+Specialized Logging when any document effected for your attraction please look logs
+
+For Log in container
 ```
 docker logs -f containerId 
 ## For Example customer container id 
 ## docker logs -f 15ce523b6f44
 ```
 
-### Logging
-
-Specialized Logging when any document effected for your attraction please look logs
-
-### GetFileInfo
-That gives you file info that you stored before.
+### GetCustomerInfo
+That gives you customer info that you stored before.
 You will use the hash and extension for getting file
 ```
-localhost:8081/store-api/file/info
+localhost:8081/book-store/customer?name=selim&surname=surname&page=1&limit=1
 ```
-
 
 
 
 Locally saves file
-Get file info from mysql
+Get file info from mongo using customer microservice
 
-// TODO:
+### TODO:
 
-There is not enough time for writes these endpoints
+There is not enough time for writes these endpoints and microservices.
 
-Get File
+More time makes these happen.
 
-Get File Infos
+The development of project has a break until review.
+
+#### Order microservice 
+* Uses customer and book services for order
+* Stores order book_id and customer_id and order count
+* Stores statictic data for order count
+
+#### Order Management
+* Uses order customer and book services for validation of order
+* Sends data to order microservice from book-store
+
+#### Statictic Microservice
+* Every microservice feed statistic for uses of their services
+* Stores data to mongo for order status
+
+#### Test
+* Writing more test and increase coverage Unit test mostly using Mockito, Junit
+* Each microservice automation validation tests
+* Using test containers for integration test in microservices which are already used mongo
+
+#### Grafana
+* Prepare a visual dashboard 
+* Each microservice sends data to actuator and prometheus collect it. But no dashboard prepared for visual.
 
 
 
